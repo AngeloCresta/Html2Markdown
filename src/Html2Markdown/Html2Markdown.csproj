@@ -1,25 +1,45 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Authors>Simon Baynes</Authors>
+	<PropertyGroup>
+		<TargetFrameworks>net481;net10.0-windows</TargetFrameworks>
+		<Authors>Simon Baynes-Angelo Cresta</Authors>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/baynezy/Html2Markdown</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Description>A library for converting HTML to markdown syntax in C#</Description>
-        <Copyright>© Simon Baynes 2013</Copyright>
+        <Copyright>© Simon Baynes 2013-2026</Copyright>
         <PackageTags>Markdown;Html;Convert</PackageTags>
         <SignAssembly>True</SignAssembly>
         <AssemblyOriginatorKeyFile>Html2Markdown.snk</AssemblyOriginatorKeyFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    </PropertyGroup>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
+	<PropertyGroup>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
+	</PropertyGroup>
+	<PropertyGroup>
+		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+		<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+		<NoWarn>$(NoWarn);SYSLIB0011;WFO1000;WFO5001;MSB3277;IL3000</NoWarn>
+		<GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="AngleSharp" Version="1.4.0"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="../../README.md" Pack="true" PackagePath="/"/>
-    </ItemGroup>
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+	
+	<ItemGroup>
+        <PackageReference Include="AngleSharp" Version="1.4.0" />
+	</ItemGroup>
+	<ItemGroup Condition=" $(targetframework.startswith('net48')) ">
+		<PackageReference Include="System.Text.Json" Version="10.0.2" />
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+	</ItemGroup>
 
 </Project>

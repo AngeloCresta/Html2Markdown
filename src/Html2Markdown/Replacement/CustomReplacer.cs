@@ -18,6 +18,10 @@ public class CustomReplacer : IReplacer
     /// <summary>
     /// Gets or sets the custom action to be used for replacing HTML tags.
     /// </summary>
-    // ReSharper disable once MemberCanBeProtected.Global
+// ReSharper disable once MemberCanBeProtected.Global
+#if NET10_0_OR_GREATER
     public Func<string, string> CustomAction { get; init; }
+#elif NET481
+    public Func<string, string> CustomAction { get; set; }
+#endif
 }

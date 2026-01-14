@@ -10,12 +10,20 @@ public class PatternReplacer : IReplacer
     /// <summary>
     /// Gets the pattern to match in the HTML.
     /// </summary>
+#if NET10_0_OR_GREATER
     public string Pattern { get; init; }
-
+#elif NET481
+    public string Pattern { get; set; }
+#endif
     /// <summary>
     /// Gets the replacement string for the matched pattern.
     /// </summary>
-    public string Replacement { get; init; }
+
+#if NET10_0_OR_GREATER
+public string Replacement { get; init; }
+#elif NET481
+    public string Replacement { get; set; }
+#endif
 
     /// <summary>
     /// Replaces occurrences of the pattern in the provided HTML with the replacement string.

@@ -353,8 +353,11 @@ internal static partial class HtmlParser
         if (!classAttributeValue.StartsWith("lang")) return classAttributeValue;
         var split = classAttributeValue.Split('-');
 
-        return split
-            [^1]; // PERFORMANCE: https://sonarcloud.io/organizations/baynezy/rules?open=csharpsquid%3AS6608&rule_key=csharpsquid%3AS6608
+        // Avoid using System.Index (i.e., [^1]) for compatibility with older .NET versions
+        return split.Length > 0 ? split[split.Length - 1] : string.Empty;
+
+        //return
+        //[^1]; // PERFORMANCE: https://sonarcloud.io/organizations/baynezy/rules?open=csharpsquid%3AS6608&rule_key=csharpsquid%3AS6608
     }
 
     internal static string ReplaceBlockquote(string html)
@@ -507,3 +510,56 @@ internal static partial class HtmlParser
     [GeneratedRegex("<[^>]+>")]
     private static partial Regex HtmlTags();
 }
+
+#if !NET7_0_OR_GREATER
+partial class HtmlParser
+{
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex FindHtmlList()
+        => new System.Text.RegularExpressions.Regex(@"<(ul|ol)\b[^>]*>([\s\S]*?)<\/\1>", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex HtmlListHasNoChildren()
+        => new System.Text.RegularExpressions.Regex(@"<(ul|ol)\b[^>]*>(?:(?!<ul|<ol)[\s\S])*?<\/\1>", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex FindHtmlListItems()
+        => new System.Text.RegularExpressions.Regex("<li[^>]*>", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex Spaces()
+        => new System.Text.RegularExpressions.Regex(@"\s+", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex EmptyQuoteLines()
+        => new System.Text.RegularExpressions.Regex(@"(>\s\r?\n)+$", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex SpacesAtTheStartOfALine()
+        => new System.Text.RegularExpressions.Regex(@"^\s+", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex TwoNewLines()
+    => new System.Text.RegularExpressions.Regex("\\n{2}", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex NestedList()
+    => new System.Text.RegularExpressions.Regex(@"\n([ ]*)(\*|\d+\.)", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex InitialCrLf()
+    => new System.Text.RegularExpressions.Regex("^\r?\n", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex FinalCrLf()
+    => new System.Text.RegularExpressions.Regex("\r?\n$", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex BreakTag()
+    => new System.Text.RegularExpressions.Regex(@"<\s*?/?\s*?br\s*?>", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    private static partial System.Text.RegularExpressions.Regex HtmlTags()
+    => new System.Text.RegularExpressions.Regex("<[^>]+>", System.Text.RegularExpressions.RegexOptions.Compiled);
+}
+#endif
